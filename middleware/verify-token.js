@@ -2,17 +2,15 @@ const jwt = require("jsonwebtoken");
 
 function verifyToken(req, res, next) {
   try {
-    // verify the token, open it up, and then assign the payload (who the user is ) to req.user, so our controller function know
-    // who is making the request
     const token = req.headers.authorization.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    // asign the payload (decoded token) to req.user
-    req.user = decoded.user;
-    // proceed to the controller function
+    // Assign decoded payload to req.user
+    req.user = decoded;
+    // Call next() to invoke the next middleware function
     next();
-  } catch (err) {
-    console.log(err);
-    res.status(401).json({ error: "Invalid Token. Please Log In" });
+  } catch (error) {
+    // If any errors, send back a 401 status and an 'Invalid token.' error message
+    res.status(401).json({ error: "Invalid authorization token." });
   }
 }
 

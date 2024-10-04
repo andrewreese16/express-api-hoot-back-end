@@ -1,12 +1,17 @@
 const mongoose = require("mongoose");
 
-const userSchema = mongoose.Schema({
-  username: String,
-  hashedPassword: String,
+const userSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    unique: true,
+    required: true,
+  },
+  hashedPassword: {
+    type: String,
+    required: true,
+  },
 });
 
-// this listens for everytime any userDocument is turned into json
-// just delete password!
 userSchema.set("toJSON", {
   transform: (document, returnedObject) => {
     delete returnedObject.hashedPassword;
